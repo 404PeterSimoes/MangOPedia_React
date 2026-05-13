@@ -1,4 +1,26 @@
 function MenuItemModal({ onClose, isSubmitting, formData, onSubmit }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!formData.name?.trim()) {
+      console.log('Name is required');
+      return;
+    }
+    if (!formData.category?.trim()) {
+      console.log('Category is required');
+      return;
+    }
+    if (
+      !formData.price ||
+      parseFloat(formData.price <= 0 || formData.price >= 1000)
+    ) {
+      console.log('Price is required and must be between 1 and 1000');
+      return;
+    }
+
+    onSubmit(formData);
+  };
+
   return (
     <>
       {/* Bootstrap Modal Backdrop */}
@@ -23,7 +45,7 @@ function MenuItemModal({ onClose, isSubmitting, formData, onSubmit }) {
               />
             </div>
             <div className="modal-body">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="row">
                   <div className="col-md-6">
                     <div className="mb-3">
