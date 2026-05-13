@@ -1,4 +1,5 @@
 import { CATEGORY, SPECIAL_TAG } from '../../utility/constants';
+import { toast } from 'react-toastify';
 
 function MenuItemModal({
   onClose,
@@ -11,18 +12,18 @@ function MenuItemModal({
     e.preventDefault();
 
     if (!formData.name?.trim()) {
-      console.log('Name is required');
+      toast.error('Name is required');
       return;
     }
     if (!formData.category?.trim()) {
-      console.log('Category is required');
+      toast.error('Category is required');
       return;
     }
     if (
       !formData.price ||
       parseFloat(formData.price <= 0 || formData.price >= 1000)
     ) {
-      console.log('Price is required and must be between 1 and 1000');
+      toast.error('Price is required and must be between 1 and 1000');
       return;
     }
 
