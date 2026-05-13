@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '../../utility/constants';
+
 function MenuItemTable({ menuItems, isLoading, error }) {
   if (isLoading) {
     return (
@@ -47,12 +49,15 @@ function MenuItemTable({ menuItems, isLoading, error }) {
             <tr key={item.id}>
               <td>
                 <img
-                  src="https://placehold.co/600x400"
+                  src={`${API_BASE_URL}/${item.image}`}
                   className="rounded"
                   style={{
                     width: '50px',
                     height: '50px',
                     objectFit: 'cover',
+                  }}
+                  onError={(e) => {
+                    e.target.src = 'https://placehold.co/100';
                   }}
                 />
               </td>
@@ -65,7 +70,7 @@ function MenuItemTable({ menuItems, isLoading, error }) {
                 <span className="badge bg-secondary">{item.category}</span>
               </td>
               <td>
-                <strong>$$</strong>
+                <strong>${item.price.toFixed(2)}</strong>
               </td>
               <td>
                 <span className="badge bg-warning text-dark">
