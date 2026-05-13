@@ -34,6 +34,11 @@ function MenuManagement() {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -78,6 +83,7 @@ function MenuManagement() {
           onSubmit={handleFormSubmit}
           onClose={handleCloseModal}
           isSubmitting={isSubmitting}
+          onChange={handleInputChange}
         />
       )}
     </div>
