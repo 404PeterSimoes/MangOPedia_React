@@ -1,4 +1,5 @@
 import { useGetMenuItemsQuery } from '../store/api/menuItemApi';
+import { API_BASE_URL } from '../utility/constants';
 
 function Home() {
   const {
@@ -76,81 +77,86 @@ function Home() {
             </div>
           ) : (
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mb-5">
-              <div className="col">
-                <div className="card h-100 border shadow-sm position-relative">
-                  <div className="position-relative overflow-hidden rounded-top">
-                    <img
-                      className="card-img-top"
-                      src="https://placehold.co/300"
+              {menuItems.map((item) => (
+                <div className="col" key={item.id}>
+                  <div className="card h-100 border shadow-sm position-relative">
+                    <div className="position-relative overflow-hidden rounded-top">
+                      <img
+                        className="card-img-top"
+                        src={`${API_BASE_URL}/${item.image}`}
+                        style={{
+                          height: '220px',
+                          objectFit: 'cover',
+                          transition: 'transform 0.3s ease',
+                        }}
+                      />
+                      {item.specialTag && (
+                        <div className="position-absolute top-0 end-0 m-3">
+                          <span className="badge bg-warning text-dark px-3 py-1 rounded-3 shadow-sm fw-semibold">
+                            {item.specialTag}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="card-body d-flex flex-column p-4">
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h5 className="card-title fw-bold mb-0 text-dark lh-sm flex-grow-1 me-3">
+                          {item.name}
+                        </h5>
+                        <div className="h4 text-primary fw-bold mb-0 flex-shrink-0">
+                          ${parseFloat(item.price).toFixed(2)}
+                        </div>
+                      </div>
+
+                      {/* Category and Rating Row */}
+                      <div className="d-flex justify-content-between align-items-center mb-3">
+                        <span className="badge text-secondary border px-2 py-1 small">
+                          {item.category}
+                        </span>
+                      </div>
+
+                      {/* Description */}
+                      <p
+                        className="card-text text-muted mb-4 flex-grow-1"
+                        style={{ fontSize: '0.9rem', lineHeight: '1.5' }}
+                      >
+                        {item.description?.length > 90
+                          ? `${item.description.substring(0, 90)}...`
+                          : item.description}
+                      </p>
+
+                      {/* Action Buttons */}
+                      <div className="mt-auto">
+                        <div className="row g-2">
+                          <div className="col-6">
+                            <a
+                              href="#"
+                              className="btn btn-outline-primary w-100 btn-sm fw-semibold"
+                            >
+                              <i className="bi bi-info-circle me-1"></i>Details
+                            </a>
+                          </div>
+                          <div className="col-6">
+                            <button className="btn btn-primary w-100 btn-sm fw-semibold">
+                              <i className="bi bi-cart-plus me-1"></i>Add Cart
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="position-absolute bottom-0 start-0 w-100"
                       style={{
-                        height: '220px',
-                        objectFit: 'cover',
-                        transition: 'transform 0.3s ease',
+                        height: '3px',
+                        background:
+                          'linear-gradient(90deg, var(--bs-primary), transparent)',
                       }}
-                    />
-
-                    <div className="position-absolute top-0 end-0 m-3">
-                      <span className="badge bg-warning text-dark px-3 py-1 rounded-3 shadow-sm fw-semibold">
-                        SPECIAL TAG
-                      </span>
-                    </div>
+                    ></div>
                   </div>
-
-                  <div className="card-body d-flex flex-column p-4">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <h5 className="card-title fw-bold mb-0 text-dark lh-sm flex-grow-1 me-3">
-                        NAME
-                      </h5>
-                      <div className="h4 text-primary fw-bold mb-0 flex-shrink-0">
-                        $$
-                      </div>
-                    </div>
-
-                    {/* Category and Rating Row */}
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                      <span className="badge text-secondary border px-2 py-1 small">
-                        CATEGORY
-                      </span>
-                    </div>
-
-                    {/* Description */}
-                    <p
-                      className="card-text text-muted mb-4 flex-grow-1"
-                      style={{ fontSize: '0.9rem', lineHeight: '1.5' }}
-                    >
-                      DESC
-                    </p>
-
-                    {/* Action Buttons */}
-                    <div className="mt-auto">
-                      <div className="row g-2">
-                        <div className="col-6">
-                          <a
-                            href="#"
-                            className="btn btn-outline-primary w-100 btn-sm fw-semibold"
-                          >
-                            <i className="bi bi-info-circle me-1"></i>Details
-                          </a>
-                        </div>
-                        <div className="col-6">
-                          <button className="btn btn-primary w-100 btn-sm fw-semibold">
-                            <i className="bi bi-cart-plus me-1"></i>Add Cart
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className="position-absolute bottom-0 start-0 w-100"
-                    style={{
-                      height: '3px',
-                      background:
-                        'linear-gradient(90deg, var(--bs-primary), transparent)',
-                    }}
-                  ></div>
                 </div>
-              </div>
+              ))}
             </div>
           ))}
 
