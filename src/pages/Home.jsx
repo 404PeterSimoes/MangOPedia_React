@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { useGetMenuItemsQuery } from '../store/api/menuItemApi';
-import { API_BASE_URL } from '../utility/constants';
+import { API_BASE_URL, CATEGORY } from '../utility/constants';
 
 function Home() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+
   const {
     data: menuItems = [],
     isLoading,
@@ -24,17 +28,25 @@ function Home() {
               type="text"
               className="form-control"
               placeholder="Search menu items..."
-              defaultValue=""
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="col-md-6">
             <label className="form-label fw-semibold text-muted small text-uppercase">
               Category
             </label>
-            <select className="form-select" defaultValue="">
-              <option key="category" value="category">
-                category
-              </option>
+            <select
+              className="form-select"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {CATEGORY.map((category) => (
+                <option value={category} key={category}>
+                  {category}
+                </option>
+              ))}
             </select>
           </div>
         </div>
