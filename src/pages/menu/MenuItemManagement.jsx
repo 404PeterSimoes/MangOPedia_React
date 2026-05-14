@@ -3,9 +3,12 @@ import MenuItemModal from '../../components/menuItems/MenuItemModal';
 import MenuItemTable from '../../components/menuItems/MenuItemTable';
 import {
   useCreateMenuItemMutation,
+  useDeleteMenuItemMutation,
   useGetMenuItemsQuery,
+  useUpdateMenuItemMutation,
 } from '../../store/api/menuItemApi';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 function MenuManagement() {
   const {
@@ -16,6 +19,8 @@ function MenuManagement() {
   } = useGetMenuItemsQuery();
 
   const [createMenuItem] = useCreateMenuItemMutation();
+  const [updateMenuItem] = useUpdateMenuItemMutation();
+  const [deleteMenuItem] = useDeleteMenuItemMutation();
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
@@ -38,6 +43,28 @@ function MenuManagement() {
       price: '',
       image: null,
     });
+  };
+
+  const handleDeleteMenuItem = async (item) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    });
+
+    if (result.isConfirmed) {
+      await deleteMenuItem(item.id);
+
+      Swal.fire({
+        title: 'Deleted!',
+        text: 'Menu Item has been deleted.',
+        icon: 'success',
+      });
+    }
   };
 
   const handleFormSubmit = async (formData) => {
@@ -63,7 +90,7 @@ function MenuManagement() {
         toast.success('Menu item created successfully!');
         refetch();
       } else {
-        toast.error('Failed to ctreate the Menu item');
+        toast.error('Failed to create the Menu item');
       }
 
       setShowModal(false);
@@ -119,6 +146,7 @@ function MenuManagement() {
                 menuItems={menuItems}
                 isLoading={isLoading}
                 error={error}
+                onDelete={handleDeleteMenuItem}
               />
             </div>
           </div>
