@@ -8,6 +8,7 @@ import Checkout from '../pages/cart/Checkout';
 import Register from '../pages/auth/Register';
 import OrderConfirmation from '../pages/order/OrderConfirmation';
 import { ROUTES } from '../utility/constants';
+import MenuItemDetails from '../pages/menu/menuItemDetails';
 
 const AppRoutes = () => (
   <Routes>
@@ -19,6 +20,7 @@ const AppRoutes = () => (
     <Route path={ROUTES.CART} element={<Cart />} />
     <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
     <Route path={ROUTES.ORDER_CONFIRMATION} element={<OrderConfirmation />} />
+    <Route path={ROUTES.MENU_DETAIL} element={<MenuItemDetails />} />
   </Routes>
 );
 
