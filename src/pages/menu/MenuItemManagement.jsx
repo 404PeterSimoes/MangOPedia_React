@@ -24,7 +24,7 @@ function MenuManagement() {
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
-  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null); // to edit
 
   const [formData, setFormData] = useState({
     name: '',
@@ -104,14 +104,33 @@ function MenuManagement() {
         formDataToSend.append('File', formData.image);
       }
 
-      let result;
-      result = await createMenuItem(formDataToSend);
+      if (selectedMenuItem) {
+        formDataToSend.append('Id', selectedMenuItem.id);
+      }
 
-      if (result.isSuccess !== false) {
-        toast.success('Menu item created successfully!');
-        refetch();
+      let result;
+      if (selectedMenuItem) {
+        // edit mode
+        result = await updateMenuItem({
+          id: selectedMenuItem.id,
+          formData: formDataToSend,
+        });
+
+        if (result.isSuccess !== false) {
+          toast.success('Menu item updated successfully!');
+          refetch();
+        } else {
+          toast.error('Failed to update the Menu item');
+        }
       } else {
-        toast.error('Failed to create the Menu item');
+        result = await createMenuItem(formDataToSend);
+
+        if (result.isSuccess !== false) {
+          toast.success('Menu item created successfully!');
+          refetch();
+        } else {
+          toast.error('Failed to create the Menu item');
+        }
       }
 
       setShowModal(false);
