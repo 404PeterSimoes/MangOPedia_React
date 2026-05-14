@@ -13,6 +13,18 @@ function Home() {
     refetch,
   } = useGetMenuItemsQuery();
 
+  const filteredItems = menuItems.filter((item) => {
+    const searchMatch = searchTerm
+      ? item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchTerm.toLowerCase())
+      : true;
+
+    const categoryMatch =
+      categoryFilter == 'All' || item.category === categoryFilter;
+
+    return searchMatch && categoryMatch;
+  });
+
   return (
     <div className="container-fluid px-0 py-4">
       {/* Hero Section */}
@@ -41,7 +53,7 @@ function Home() {
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
-              <option value="">All Categories</option>
+              <option value="All">All Categories</option>
               {CATEGORY.map((category) => (
                 <option value={category} key={category}>
                   {category}
@@ -80,7 +92,7 @@ function Home() {
 
         {!isLoading &&
           !error &&
-          (menuItems.length === 0 ? (
+          (filteredItems.length === 0 ? (
             <div className="text-center py-5">
               <h4>No menu items found</h4>
               <p className="text-muted">
@@ -89,7 +101,7 @@ function Home() {
             </div>
           ) : (
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mb-5">
-              {menuItems.map((item) => (
+              {filteredItems.map((item) => (
                 <div className="col" key={item.id}>
                   <div className="card h-100 border shadow-sm position-relative">
                     <div className="position-relative overflow-hidden rounded-top">
