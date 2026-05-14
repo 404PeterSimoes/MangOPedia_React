@@ -152,6 +152,7 @@ function MenuItemModal({
                     type="file"
                     className="form-control"
                     name="image"
+                    onChange={onChange}
                     accept="image/*"
                   />
                   <div className="form-text">
