@@ -5,6 +5,7 @@ import {
   useCreateMenuItemMutation,
   useGetMenuItemsQuery,
 } from '../../store/api/menuItemApi';
+import { toast } from 'react-toastify';
 
 function MenuManagement() {
   const {
@@ -28,6 +29,17 @@ function MenuManagement() {
     image: null,
   });
 
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      description: '',
+      specialTag: '',
+      category: '',
+      price: '',
+      image: null,
+    });
+  };
+
   const handleFormSubmit = async (formData) => {
     setIsSubttiming(true);
     try {
@@ -46,6 +58,16 @@ function MenuManagement() {
 
       let result;
       result = await createMenuItem(formDataToSend);
+
+      if (result.isSuccess !== false) {
+        toast.success('Menu item created successfully!');
+        refetch();
+      } else {
+        toast.error('Failed to ctreate the Menu item');
+      }
+
+      setShowModal(false);
+      resetForm();
 
       console.log(result);
     } catch (error) {
