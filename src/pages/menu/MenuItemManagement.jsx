@@ -24,6 +24,7 @@ function MenuManagement() {
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -65,6 +66,17 @@ function MenuManagement() {
         icon: 'success',
       });
     }
+  };
+
+  const handleAddMenuItem = async () => {
+    resetForm();
+    setSelectedMenuItem(null);
+    setShowModal(true);
+  };
+
+  const handleEditMenuItem = async (item) => {
+    setSelectedMenuItem(item);
+    setShowModal(true);
   };
 
   const handleFormSubmit = async (formData) => {
@@ -128,10 +140,7 @@ function MenuManagement() {
                 Manage your restaurant's menu items
               </p>
             </div>
-            <button
-              className="btn btn-primary"
-              onClick={() => setShowModal(true)}
-            >
+            <button className="btn btn-primary" onClick={handleAddMenuItem}>
               <i className="bi bi-plus-circle me-2"></i>
               Add Menu Item
             </button>
@@ -147,6 +156,7 @@ function MenuManagement() {
                 isLoading={isLoading}
                 error={error}
                 onDelete={handleDeleteMenuItem}
+                onEdit={handleEditMenuItem}
               />
             </div>
           </div>
