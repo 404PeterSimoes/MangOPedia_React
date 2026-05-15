@@ -1,4 +1,25 @@
+import { useState } from 'react';
+import { ROLES } from '../../utility/constants';
+import { useRegisterUserMutation } from '../../store/api/authApi';
+
 function Register() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    role: ROLES.CUSTOMER,
+  });
+
+  const [registerUser, { isLoading, error }] = useRegisterUserMutation();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <div className="min-vh-100 d-flex align-items-center bg-body-tertiary py-5">
       <div className="container">
@@ -50,6 +71,8 @@ function Register() {
                     name="name"
                     placeholder="Full Name"
                     required
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                   <label htmlFor="name">Full Name</label>
                 </div>
@@ -61,6 +84,8 @@ function Register() {
                     name="email"
                     placeholder="name@example.com"
                     required
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                   <label htmlFor="email">Email address</label>
                 </div>
@@ -75,6 +100,8 @@ function Register() {
                         name="password"
                         placeholder="Password"
                         required
+                        value={formData.password}
+                        onChange={handleChange}
                       />
                       <label htmlFor="password">Password</label>
                     </div>
@@ -88,6 +115,8 @@ function Register() {
                         name="confirmPassword"
                         placeholder="Confirm Password"
                         required
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
                       />
                       <label htmlFor="confirmPassword">Confirm Password</label>
                     </div>
@@ -98,9 +127,15 @@ function Register() {
                   <label className="form-label small fw-semibold text-uppercase text-muted">
                     Role
                   </label>
-                  <select className="form-select" id="role" name="role">
-                    <option value="Customer">Customer</option>
-                    <option value="Admin">Admin</option>
+                  <select
+                    className="form-select"
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                  >
+                    <option value={ROLES.CUSTOMER}>{ROLES.CUSTOMER}</option>
+                    <option value={ROLES.ADMIN}>{ROLES.ADMIN}</option>
                   </select>
                 </div>
 
