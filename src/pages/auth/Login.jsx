@@ -37,7 +37,9 @@ function Login() {
       const result = await loginUser(formData).unwrap();
 
       if (result.isSuccess) {
-        const token = result.token;
+        console.log(result);
+
+        const token = result.result.token;
         const user = getUserInfoFromToken(token);
         console.log(token, user);
 

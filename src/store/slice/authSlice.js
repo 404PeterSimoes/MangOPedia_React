@@ -12,10 +12,10 @@ const getInitialAuthState = () => {
 
   // Clear invalid token
   if (
-    !token ||
-    token === undefined ||
-    token === null ||
-    isTokenExpired(token)
+    !storedToken ||
+    storedToken === undefined ||
+    storedToken === null ||
+    isTokenExpired(storedToken)
   ) {
     localStorage.removeItem(STORAGE_KEYS.TOKEN);
     localStorage.removeItem(STORAGE_KEYS.USER);
@@ -32,7 +32,7 @@ const getInitialAuthState = () => {
     try {
       user = JSON.parse(storedToken);
     } catch {
-      user = getUserInfoFromToken(token);
+      user = getUserInfoFromToken(storedToken);
       if (user) {
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
       }
@@ -40,8 +40,8 @@ const getInitialAuthState = () => {
   }
   return {
     user,
-    token,
-    isAuthenticated: !!token && !!user,
+    storedToken,
+    isAuthenticated: !!storedToken && !!user,
   };
 };
 
@@ -62,3 +62,4 @@ const authSlice = createSlice({
 });
 
 export const { setAuth } = authSlice.actions;
+export default authSlice.reducer;
