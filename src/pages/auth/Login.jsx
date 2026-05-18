@@ -1,4 +1,51 @@
+import { useState } from 'react';
+import { ROLES, ROUTES } from '../../utility/constants';
+import { useLoginUserMutation } from '../../store/api/authApi';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
+
 function Login() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      toast.error('Please fill in all the fields.');
+      return;
+    }
+
+    try {
+      const result = await loginUser(formData).unwrap();
+
+      if (result.isSuccess) {
+        toast.success('Login successful! Please login to continue.');
+        console.log(result);
+        // navigate(ROUTES.HOME);
+      } else {
+        toast.error(result.errorMessages?.[0] || 'Login failed.');
+      }
+    } catch (error) {
+      toast.error(error.data?.errorMessages?.[0] || 'Login failed.');
+    }
+
+    console.log(formData);
+  };
+
   return (
     <div className="min-vh-100 d-flex align-items-center bg-body-tertiary py-5">
       <div className="container">
@@ -42,7 +89,7 @@ function Login() {
                 <p className="text-muted small mb-0">Access your account</p>
               </div>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">
                   <input
                     type="email"
@@ -50,7 +97,8 @@ function Login() {
                     id="email"
                     name="email"
                     placeholder="name@example.com"
-                    required
+                    value={formData.email}
+                    onChange={handleChange}
                   />
                   <label htmlFor="email">Email address</label>
                 </div>
@@ -64,7 +112,8 @@ function Login() {
                         id="password"
                         name="password"
                         placeholder="Password"
-                        required
+                        value={formData.password}
+                        onChange={handleChange}
                       />
                       <label htmlFor="password">Password</label>
                     </div>
@@ -73,25 +122,32 @@ function Login() {
 
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="btn btn-primary w-100 py-2 mb-3"
                 >
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
-                  Signing In... 'Sign In'
+                  {isLoading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></span>
+                      Signing In...
+                    </>
+                  ) : (
+                    <>Sign In</>
+                  )}
                 </button>
               </form>
               <div className="text-center small">
                 <span className="text-muted">No account? </span>
-                <a href="/" className="fw-semibold">
+                <Link to={ROUTES.REGISTER} className="fw-semibold">
                   Create one
-                </a>
+                </Link>
               </div>
               <div className="text-center mt-3 small">
-                <a href="/" className="text-decoration-none">
+                <Link to={ROUTES.HOME} className="text-decoration-none">
                   <i className="bi bi-arrow-left me-1"></i>Back to Home
-                </a>
+                </Link>
               </div>
             </div>
           </div>
