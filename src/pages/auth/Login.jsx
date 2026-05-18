@@ -43,7 +43,7 @@ function Login() {
         const user = getUserInfoFromToken(token);
         console.log(token, user);
 
-        toast.success('Login successful! Please login to continue.');
+        toast.success('Login successful!');
         dispatch(setAuth({ user, token }));
 
         // navigate(ROUTES.HOME);
