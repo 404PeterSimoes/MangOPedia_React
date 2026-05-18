@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ROLES } from '../../utility/constants';
+import { ROLES, ROUTES } from '../../utility/constants';
 import { useRegisterUserMutation } from '../../store/api/authApi';
+import { Link } from 'react-router';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,11 @@ function Register() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
   };
 
   return (
@@ -62,7 +68,7 @@ function Register() {
                 <p className="text-muted small mb-0">Sign up to get started</p>
               </div>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-floating mb-3">
                   <input
                     type="text"
@@ -133,6 +139,7 @@ function Register() {
                     name="role"
                     value={formData.role}
                     onChange={handleChange}
+                    disabled={isLoading}
                   >
                     <option value={ROLES.CUSTOMER}>{ROLES.CUSTOMER}</option>
                     <option value={ROLES.ADMIN}>{ROLES.ADMIN}</option>
@@ -143,23 +150,29 @@ function Register() {
                   type="submit"
                   className="btn btn-primary w-100 py-2 mb-3"
                 >
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                  ></span>
-                  Creating... Create Account
+                  {isLoading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></span>
+                      Creating...
+                    </>
+                  ) : (
+                    <>Create Account</>
+                  )}
                 </button>
               </form>
               <div className="text-center small">
                 <span className="text-muted">Already have an account? </span>
-                <a href="/login" className="fw-semibold">
+                <Link to={ROUTES.LOGIN} className="fw-semibold">
                   Sign in
-                </a>
+                </Link>
               </div>
               <div className="text-center mt-3 small">
-                <a href="/" className="text-decoration-none">
+                <Link to={ROUTES.HOME} className="text-decoration-none">
                   <i className="bi bi-arrow-left me-1"></i>Back to Home
-                </a>
+                </Link>
               </div>
             </div>
           </div>
