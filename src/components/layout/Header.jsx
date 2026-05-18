@@ -1,9 +1,23 @@
-import { NavLink } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { ROUTES } from '../../utility/constants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slice/authSlice';
+import { toast } from 'react-toastify';
 
 function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    try {
+      dispatch(logout());
+      navigate(ROUTES.HOME);
+      toast.success('Logout successful!');
+    } catch {
+      toast.error('Error on logout.');
+    }
+  };
 
   return (
     <nav className="navbar navbar-expand-lg  border-bottom shadow-sm">
@@ -56,7 +70,6 @@ function Header() {
 
             {isAuthenticated ? (
               <>
-                {' '}
                 <li className="nav-item dropdown">
                   <button
                     className="nav-link dropdown-toggle btn btn-link d-flex align-items-center gap-2"
@@ -105,7 +118,10 @@ function Header() {
                       <hr className="dropdown-divider my-2" />
                     </li>
                     <li>
-                      <button className="dropdown-item d-flex align-items-center gap-2 text-danger rounded-2">
+                      <button
+                        onClick={handleLogout}
+                        className="dropdown-item d-flex align-items-center gap-2 text-danger rounded-2"
+                      >
                         <i className="bi bi-box-arrow-right"></i>
                         <span>Logout</span>
                       </button>
