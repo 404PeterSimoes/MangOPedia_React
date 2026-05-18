@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { ROLES, ROUTES } from '../../utility/constants';
 import { useRegisterUserMutation } from '../../store/api/authApi';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 
 function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,6 +26,42 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      toast.error('Please fill in all the fields.');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+
+    const registerData = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+    };
+    try {
+      const result = await registerUser(registerData).unwrap();
+
+      if (result.isSuccess) {
+        toast.success('Registration successful! Please login to continue.');
+        navigate(ROUTES.LOGIN);
+      } else {
+        toast.error(result.errorMessages?.[0] || 'Registration failed.');
+      }
+      console.log(result);
+    } catch (error) {
+      toast.error(error.data.errorMessages?.[0] || 'Registration failed.');
+    }
+
     console.log(formData);
   };
 
@@ -76,7 +115,6 @@ function Register() {
                     id="name"
                     name="name"
                     placeholder="Full Name"
-                    required
                     value={formData.name}
                     onChange={handleChange}
                   />
@@ -89,7 +127,6 @@ function Register() {
                     id="email"
                     name="email"
                     placeholder="name@example.com"
-                    required
                     value={formData.email}
                     onChange={handleChange}
                   />
@@ -105,7 +142,6 @@ function Register() {
                         id="password"
                         name="password"
                         placeholder="Password"
-                        required
                         value={formData.password}
                         onChange={handleChange}
                       />
@@ -120,7 +156,6 @@ function Register() {
                         id="confirmPassword"
                         name="confirmPassword"
                         placeholder="Confirm Password"
-                        required
                         value={formData.confirmPassword}
                         onChange={handleChange}
                       />
