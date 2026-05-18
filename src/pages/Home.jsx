@@ -2,10 +2,15 @@ import { useState } from 'react';
 import { useGetMenuItemsQuery } from '../store/api/menuItemApi';
 import { API_BASE_URL, CATEGORY, ROUTES } from '../utility/constants';
 import { Link } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../store/slice/cartSlice';
+import { toast } from 'react-toastify';
 
 function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
+
+  const dispatch = useDispatch();
 
   const {
     data: menuItems = [],
@@ -13,6 +18,19 @@ function Home() {
     error,
     refetch,
   } = useGetMenuItemsQuery();
+
+  const handleAddToCart = (item) => {
+    dispatch(
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        quantity: 1,
+      }),
+    );
+    toast.success(`${item.name} added to the cart!`);
+  };
 
   const filteredItems = menuItems.filter((item) => {
     const searchMatch = searchTerm
@@ -163,7 +181,10 @@ function Home() {
                             </Link>
                           </div>
                           <div className="col-6">
-                            <button className="btn btn-primary w-100 btn-sm fw-semibold">
+                            <button
+                              className="btn btn-primary w-100 btn-sm fw-semibold"
+                              onClick={() => handleAddToCart(item)}
+                            >
                               <i className="bi bi-cart-plus me-1"></i>Add Cart
                             </button>
                           </div>
