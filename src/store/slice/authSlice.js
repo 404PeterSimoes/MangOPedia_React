@@ -44,3 +44,21 @@ const getInitialAuthState = () => {
     isAuthenticated: !!token && !!user,
   };
 };
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: { ...getInitialAuthState() },
+  reducers: {
+    setAuth: (state, action) => {
+      const { user, token } = action.payload;
+      state.user = user;
+      state.token = token;
+      state.isAuthenticated = !!(user && token);
+
+      if (token) localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+      if (user) localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
+    },
+  },
+});
+
+export const { setAuth } = authSlice.actions;
