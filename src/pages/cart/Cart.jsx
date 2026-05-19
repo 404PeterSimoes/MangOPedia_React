@@ -8,10 +8,13 @@ import {
 } from '../../store/slice/cartSlice';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
+import { useCreateOrderMutation } from '../../store/api/ordersApi';
 
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [createOrder, { isLoading }] = useCreateOrderMutation();
 
   const { items, totalAmount, totalItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.auth);
@@ -70,27 +73,45 @@ function Cart() {
       return;
     }
 
-    // const registerData = {
-    //   name: formData.name,
-    //   email: formData.email,
-    //   password: formData.password,
-    //   role: formData.role,
-    // };
-    // try {
-    //   const result = await registerUser(registerData).unwrap();
+    if (!user?.id) {
+      toast.error('Unable to identify the user. Please log in again.');
+      return;
+    }
 
-    //   if (result.isSuccess) {
-    //     toast.success('Registration successful! Please login to continue.');
-    //     navigate(ROUTES.LOGIN);
-    //   } else {
-    //     toast.error(result.errorMessages?.[0] || 'Registration failed.');
-    //   }
-    //   console.log(result);
-    // } catch (error) {
-    //   toast.error(error.data?.errorMessages?.[0] || 'Registration failed.');
-    // }
+    const orderData = {
+      pickUpName: formData.pickUpName,
+      pickUpPhoneNumber: formData.pickUpPhoneNumber,
+      pickUpEmail: formData.pickUpEmail,
+      aaplicationUserId: user?.id,
+      orderTotal: totalAmount,
+      totalItems: totalItems,
+      orderDetailsDTO: items.map((item) => ({
+        menuItemId: item.id,
+        quantity: item.quantity,
+        itemName: item.name,
+        price: item.price,
+      })),
+    };
 
-    // console.log(formData);
+    console.log(orderData);
+
+    try {
+      const result = await createOrder(orderData).unwrap();
+
+      if (result.isSuccess) {
+        console.log(result);
+        toast.success('Order placed successfully!');
+        // navigate(ROUTES.LOGIN);
+      } else {
+        toast.error(result.errorMessages?.[0] || 'Failed to place the order!');
+      }
+    } catch (error) {
+      toast.error(
+        error.data?.errorMessages?.[0] || 'Failed to place the order!',
+      );
+    }
+
+    console.log(formData);
   };
 
   if (items.length === 0)
