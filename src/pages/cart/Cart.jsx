@@ -110,8 +110,6 @@ function Cart() {
         error.data?.errorMessages?.[0] || 'Failed to place the order!',
       );
     }
-
-    console.log(formData);
   };
 
   if (items.length === 0)

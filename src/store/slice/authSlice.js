@@ -1,10 +1,6 @@
+import { STORAGE_KEYS } from '../../utility/constants';
 import { getUserInfoFromToken, isTokenExpired } from '../../utility/jwtUtility';
 import { createSlice } from '@reduxjs/toolkit';
-
-const STORAGE_KEYS = {
-  TOKEN: 'token-mango',
-  USER: 'user-mango',
-};
 
 const getInitialAuthState = () => {
   const storedToken = localStorage.getItem(STORAGE_KEYS.TOKEN);
