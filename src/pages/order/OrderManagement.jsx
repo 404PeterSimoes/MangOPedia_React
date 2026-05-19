@@ -4,17 +4,18 @@ import {
   useUpdateOrderMutation,
 } from '../../store/api/ordersApi';
 import { toast } from 'react-toastify';
-import Swal from 'sweetalert2';
-import { useUpdateMenuItemMutation } from '../../store/api/menuItemApi';
+import OrderTable from '../../components/orders/OrderTable';
 
 function OrderManagement() {
   const { data: orders = [], isLoading, error, refetch } = useGetOrdersQuery();
 
-  const [updateOrder] = useUpdateMenuItemMutation();
+  const [updateOrder] = useUpdateOrderMutation();
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null); // to edit
+
+  console.log(orders);
 
   const handleFormSubmit = async (formData) => {
     setIsSubttiming(true);
@@ -55,43 +56,26 @@ function OrderManagement() {
         <div className="col">
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <h2>Menu Item Management</h2>
-              <p className="text-muted mb-0">
-                Manage your restaurant's menu items
-              </p>
+              <h2>Order Management</h2>
+              <p className="text-muted mb-0">Manage your restaurant's orders</p>
             </div>
-            <button className="btn btn-primary" onClick={handleAddMenuItem}>
-              <i className="bi bi-plus-circle me-2"></i>
-              Add Menu Item
-            </button>
           </div>
         </div>
       </div>
       <div className="row">
         <div className="col">
           <div className="card">
-            <div className="card-body">
-              <MenuItemTable
-                menuItems={menuItems}
-                isLoading={isLoading}
-                error={error}
-                onDelete={handleDeleteMenuItem}
-                onEdit={handleEditMenuItem}
-              />
-            </div>
+            <div className="card-body"></div>
           </div>
         </div>
       </div>
-      {showModal && (
-        <MenuItemModal
-          formData={formData}
-          onSubmit={handleFormSubmit}
-          onClose={handleCloseModal}
-          isSubmitting={isSubmitting}
-          onChange={handleInputChange}
-          isEditing={!!selectedMenuItem}
-        />
-      )}
+
+      <OrderTable
+        orders={orders}
+        isLoading={isLoading}
+        error={error}
+        onEdit={handleEditOrder}
+      />
     </div>
   );
 }

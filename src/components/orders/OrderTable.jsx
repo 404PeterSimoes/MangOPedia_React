@@ -1,13 +1,13 @@
 import { API_BASE_URL } from '../../utility/constants';
 
-function OrderTable({ menuItems, isLoading, error, onDelete, onEdit }) {
+function OrderTable({ orders, isLoading, error, onEdit }) {
   if (isLoading) {
     return (
       <div className="text-center py-4">
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
-        <p className="mt-2">Loading menu items...</p>
+        <p className="mt-2">Loading orders...</p>
       </div>
     );
   }
@@ -15,18 +15,18 @@ function OrderTable({ menuItems, isLoading, error, onDelete, onEdit }) {
   if (error) {
     return (
       <div className="alert alert-danger">
-        <h5>Error Loading Menu Items</h5>
-        <p>An error occurred while loading menu items.</p>
+        <h5>Error Loading Orders</h5>
+        <p>An error occurred while loading orders.</p>
       </div>
     );
   }
 
-  if (!menuItems?.length) {
+  if (!orders?.length) {
     return (
       <div className="text-center py-5">
         <i className="bi bi-basket text-muted" style={{ fontSize: '3rem' }}></i>
-        <h4 className="mt-3 text-muted">No Menu Items</h4>
-        <p className="text-muted">Start by adding your first menu item.</p>
+        <h4 className="mt-3 text-muted">No Orders</h4>
+        <p className="text-muted">Start by adding your first order.</p>
       </div>
     );
   }
@@ -36,45 +36,51 @@ function OrderTable({ menuItems, isLoading, error, onDelete, onEdit }) {
       <table className="table table-hover">
         <thead className="table-dark">
           <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Special Tag</th>
-            <th>Actions</th>
+            <th>Order #</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {menuItems.map((item) => (
-            <tr key={item.id}>
+          {orders.map((order) => (
+            <tr key={order.orderHeaderId}>
+              <td className="fw-semibold">#{order.orderHeaderId}</td>
               <td>
-                <img
-                  src={`${API_BASE_URL}/${item.image}`}
-                  className="rounded"
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    objectFit: 'cover',
-                  }}
-                  onError={(e) => {
-                    e.target.src = 'https://placehold.co/100';
-                  }}
-                />
+                <small className="text-muted">{order.orderDate}</small>
               </td>
               <td>
-                <strong>{item.name}</strong>
-                <br />
-                <small className="text-muted">{item.description}</small>
+                <div className="small">
+                  <div
+                    className="fw-semibold text-truncate"
+                    style={{ maxWidth: '140px' }}
+                  >
+                    {order.pickUpName}
+                  </div>
+                  <div
+                    className="fw-semibold text-truncate"
+                    style={{ maxWidth: '140px' }}
+                  >
+                    {order.pickUpEmail}
+                  </div>
+                  <div
+                    className="fw-semibold text-truncate"
+                    style={{ maxWidth: '140px' }}
+                  >
+                    {order.pickUpPhoneNumber}
+                  </div>
+                </div>
               </td>
               <td>
-                <span className="badge bg-secondary">{item.category}</span>
+                <strong>${order.totalItems}</strong>
               </td>
+              <td>${parseFloat(order.orderTotal || 0).toFixed(2)}</td>
               <td>
-                <strong>${item.price.toFixed(2)}</strong>
-              </td>
-              <td>
-                <span className="badge bg-warning text-dark">
-                  {item.specialTag}
+                <span className="btn btn-small disaled btn-primary">
+                  {order.status}
                 </span>
               </td>
               <td>
@@ -85,13 +91,6 @@ function OrderTable({ menuItems, isLoading, error, onDelete, onEdit }) {
                     title="Edit"
                   >
                     <i className="bi bi-pencil"></i>
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    title="Delete"
-                    onClick={() => onDelete(item)}
-                  >
-                    <i className="bi bi-trash"></i>
                   </button>
                 </div>
               </td>
