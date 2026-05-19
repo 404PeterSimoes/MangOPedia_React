@@ -82,7 +82,7 @@ function Cart() {
       pickUpName: formData.pickUpName,
       pickUpPhoneNumber: formData.pickUpPhoneNumber,
       pickUpEmail: formData.pickUpEmail,
-      aaplicationUserId: user?.id,
+      applicationUserId: user?.id,
       orderTotal: totalAmount,
       totalItems: totalItems,
       orderDetailsDTO: items.map((item) => ({
@@ -101,6 +101,18 @@ function Cart() {
       if (result.isSuccess) {
         console.log(result);
         toast.success('Order placed successfully!');
+        navigate(ROUTES.ORDER_CONFIRMATION, {
+          state: {
+            orderData: {
+              orderNumber: result.result.orderHeaderId,
+              pickUpName: formData.pickUpName,
+              pickUpEmail: formData.pickUpEmail,
+              pickUpPhoneNumber: formData.pickUpPhoneNumber,
+              orderTotal: totalAmount,
+              totalItems: totalItems,
+            },
+          },
+        });
         // navigate(ROUTES.LOGIN);
       } else {
         toast.error(result.errorMessages?.[0] || 'Failed to place the order!');
@@ -364,11 +376,22 @@ function Cart() {
 
                     {/* Place Order Button */}
                     <div className="d-grid">
-                      <button className="btn btn-primary btn-lg" type="submit">
-                        <span className="spinner-border spinner-border-sm me-2"></span>
-                        Processing...
-                        <i className="bi bi-credit-card me-2"></i>
-                        Place Order (${totalAmount.toFixed(2)})
+                      <button
+                        className="btn btn-primary btn-lg"
+                        type="submit"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <span className="spinner-border spinner-border-sm me-2"></span>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <i className="bi bi-credit-card me-2"></i>
+                            Place Order (${totalAmount.toFixed(2)})
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>
