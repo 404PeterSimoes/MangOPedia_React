@@ -83,7 +83,7 @@ function Header() {
                       className="text-truncate"
                       style={{ maxWidth: '120px' }}
                     >
-                      Hello
+                      Hello {user?.name?.split(' ')?.[0] || 'User'}
                     </span>
                   </button>
                   <ul
