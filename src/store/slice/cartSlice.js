@@ -56,19 +56,21 @@ const cartSlice = createSlice({
       Object.assign(state, calculateTotals(state.items));
       saveCart(state.items);
     },
+
     removeFromCart: (state, action) => {
       state.items = state.items.filter((item) => item.id !== action.payload);
 
       Object.assign(state, calculateTotals(state.items));
       saveCart(state.items);
     },
+
     updateQuantity: (state, action) => {
       const { id, quantity } = action.payload;
 
       if (quantity <= 0) {
         state.items = state.items.filter((item) => item.id !== id);
       } else {
-        const item = state.items.filter((item) => item.id === id);
+        const item = state.items.find((item) => item.id === id);
         if (item) item.quantity = quantity;
       }
 
