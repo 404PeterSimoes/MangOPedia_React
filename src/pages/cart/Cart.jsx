@@ -7,12 +7,14 @@ import {
   updateQuantity,
 } from '../../store/slice/cartSlice';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { items, totalAmount, totalItems } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.auth);
 
   const handleQuantityChange = (id, quantity) => {
     if (quantity < 1) {
@@ -30,6 +32,65 @@ function Cart() {
   const handleClearCart = () => {
     dispatch(clearCart());
     toast.success('Cart cleared successfully.');
+  };
+
+  const [formData, setFormData] = useState({
+    pickUpName: user?.name || '',
+    pickUpPhoneNumber: '',
+    pickUpEmail: user?.email || '',
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const errors = [];
+    if (!formData.pickUpName.trim()) errors.push('Full Name is required.');
+    if (!formData.pickUpPhoneNumber.trim())
+      errors.push('Phone Number is required.');
+    if (!formData.pickUpEmail.trim()) errors.push('Email is required.');
+
+    if (errors.length > 0) {
+      toast.error(
+        <div>
+          <strong>Please correct the following:</strong>
+          <ul className="mb-0 mt-1 ps-3">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>,
+      );
+      return;
+    }
+
+    // const registerData = {
+    //   name: formData.name,
+    //   email: formData.email,
+    //   password: formData.password,
+    //   role: formData.role,
+    // };
+    // try {
+    //   const result = await registerUser(registerData).unwrap();
+
+    //   if (result.isSuccess) {
+    //     toast.success('Registration successful! Please login to continue.');
+    //     navigate(ROUTES.LOGIN);
+    //   } else {
+    //     toast.error(result.errorMessages?.[0] || 'Registration failed.');
+    //   }
+    //   console.log(result);
+    // } catch (error) {
+    //   toast.error(error.data?.errorMessages?.[0] || 'Registration failed.');
+    // }
+
+    // console.log(formData);
   };
 
   if (items.length === 0)
@@ -222,7 +283,7 @@ function Cart() {
           {/* Right Column - Sticky Checkout Panel */}
           <div className="col-lg-4">
             <div className="sticky-top" style={{ top: '20px' }}>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="card rounded shadow-sm">
                   <div className="p-4">
                     {/* Order Summary */}
@@ -243,6 +304,8 @@ function Cart() {
                               id="pickUpName"
                               name="pickUpName"
                               placeholder="Full Name"
+                              value={formData.pickUpName}
+                              onChange={handleChange}
                             />
                             <label htmlFor="pickUpName">Full Name *</label>
                           </div>
@@ -255,6 +318,8 @@ function Cart() {
                               id="pickUpPhoneNumber"
                               name="pickUpPhoneNumber"
                               placeholder="Phone Number"
+                              value={formData.pickUpPhoneNumber}
+                              onChange={handleChange}
                             />
                             <label htmlFor="pickUpPhoneNumber">
                               Phone Number *
@@ -269,6 +334,8 @@ function Cart() {
                               id="pickUpEmail"
                               name="pickUpEmail"
                               placeholder="Email"
+                              value={formData.pickUpEmail}
+                              onChange={handleChange}
                             />
                             <label htmlFor="pickUpEmail">Email Address *</label>
                           </div>
