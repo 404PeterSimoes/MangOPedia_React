@@ -5,31 +5,53 @@ import {
 } from '../../store/api/ordersApi';
 import { toast } from 'react-toastify';
 import OrderTable from '../../components/orders/OrderTable';
-import { ORDER_STATUS_OPTIONS } from '../../utility/constants';
+import { ORDER_STATUS_OPTIONS, ROLES } from '../../utility/constants';
 import OrderDetailsModal from '../../components/orders/OrderDetailsModal';
+import { useSelector } from 'react-redux';
 
 function OrderManagement() {
   const { data: orders = [], isLoading, error, refetch } = useGetOrdersQuery();
 
+  const { user } = useSelector((state) => state.auth);
+
   const [updateOrder] = useUpdateOrderMutation();
+
+  const isAdmin = user?.role === ROLES.ADMIN;
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  const [updateData, setUpdateData] = useState({ status: '' });
+
   const [statusFilter, setStatusFilter] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
 
-  const handleFormSubmit = async (formData) => {
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
     setIsSubttiming(true);
+
     try {
+      if (!selectedOrder || !isAdmin) {
+        toast.error('You do not have permission to update orders!');
+        setIsSubmitting(false);
+        return;
+      }
+
       let result;
+      result = await updateOrder({
+        orderId: selectedOrder.orderHeaderId,
+        orderData: {
+          status: updateData.status,
+          orderHeaderId: selectedOrder.orderHeaderId,
+        },
+      });
 
       if (result.isSuccess !== false) {
-        toast.success('Menu item created successfully!');
+        toast.success('Order updated successfully!');
         refetch();
       } else {
-        toast.error('Failed to create the Menu item');
+        toast.error('Failed to update the order.');
       }
 
       setShowModal(false);
@@ -127,6 +149,8 @@ function OrderManagement() {
       {showModal && (
         <OrderDetailsModal
           order={selectedOrder}
+          updateData={updateData}
+          onUpdateDataChange={setUpdateData}
           onSubmit={handleFormSubmit}
           onClose={handleCloseModal}
           isSubmitting={isSubmitting}
