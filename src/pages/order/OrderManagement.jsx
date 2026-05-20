@@ -6,6 +6,7 @@ import {
 import { toast } from 'react-toastify';
 import OrderTable from '../../components/orders/OrderTable';
 import { ORDER_STATUS_OPTIONS } from '../../utility/constants';
+import OrderDetailsModal from '../../components/orders/OrderDetailsModal';
 
 function OrderManagement() {
   const { data: orders = [], isLoading, error, refetch } = useGetOrdersQuery();
@@ -114,17 +115,25 @@ function OrderManagement() {
       <div className="row">
         <div className="col">
           <div className="card">
-            <div className="card-body"></div>
+            <div className="card-body">
+              <OrderTable
+                orders={filteredOrders}
+                isLoading={isLoading}
+                error={error}
+                onEdit={handleEditOrder}
+              />
+            </div>
           </div>
         </div>
       </div>
-
-      <OrderTable
-        orders={filteredOrders}
-        isLoading={isLoading}
-        error={error}
-        onEdit={handleEditOrder}
-      />
+      {showModal && (
+        <OrderDetailsModal
+          order={selectedOrder}
+          onSubmit={handleFormSubmit}
+          onClose={handleCloseModal}
+          isSubmitting={isSubmitting}
+        />
+      )}
     </div>
   );
 }
