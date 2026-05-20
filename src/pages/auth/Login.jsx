@@ -37,11 +37,8 @@ function Login() {
       const result = await loginUser(formData).unwrap();
 
       if (result.isSuccess) {
-        console.log(result);
-
         const token = result.result.token;
         const user = getUserInfoFromToken(token);
-        console.log(token, user);
 
         toast.success('Login successful!');
         dispatch(setAuth({ user, token }));
@@ -53,8 +50,6 @@ function Login() {
     } catch (error) {
       toast.error(error.data?.errorMessages?.[0] || 'Login failed.');
     }
-
-    console.log(formData);
   };
 
   return (

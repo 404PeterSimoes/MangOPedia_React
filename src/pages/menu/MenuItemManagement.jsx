@@ -135,8 +135,6 @@ function MenuManagement() {
 
       setShowModal(false);
       resetForm();
-
-      console.log(result);
     } catch (error) {
       console.log(error);
     } finally {

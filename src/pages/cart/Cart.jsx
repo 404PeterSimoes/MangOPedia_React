@@ -93,13 +93,10 @@ function Cart() {
       })),
     };
 
-    console.log(orderData);
-
     try {
       const result = await createOrder(orderData).unwrap();
 
       if (result.isSuccess) {
-        console.log(result);
         toast.success('Order placed successfully!');
         navigate(ROUTES.ORDER_CONFIRMATION, {
           state: {

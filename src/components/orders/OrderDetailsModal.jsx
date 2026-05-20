@@ -1,4 +1,7 @@
+import { formatDate } from '../../utility/generalUtility';
+
 function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
+  console.log(order);
   return (
     <>
       <div className="modal-backdrop fade show" />
@@ -15,8 +18,12 @@ function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
           <div className="modal-content border-0 shadow">
             <div className="modal-header border-0 pb-0">
               <div>
-                <h5 className="modal-title fw-bold mb-0">Order #</h5>
-                <small className="text-muted">Placed</small>
+                <h5 className="modal-title fw-bold mb-0">
+                  Order #{order.orderHeaderId}
+                </h5>
+                <small className="text-muted">
+                  Placed {formatDate(order.orderDate)}
+                </small>
               </div>
               <button
                 type="button"
@@ -33,11 +40,12 @@ function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
                       <h6 className="fw-bold mb-2">Order Info</h6>
                       <div className="small mb-1">
                         <strong>Total:</strong> $
+                        {parseFloat(order?.orderTotal || 0).toFixed(2)}
                       </div>
                       <div className="small">
                         <strong>Status:</strong>
                         <span className={`badge p-2 text-bg-success ms-1`}>
-                          STATUS
+                          {order.status}
                         </span>
                       </div>
                     </div>
@@ -46,13 +54,14 @@ function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
                     <div className="border rounded-3 p-3 h-100">
                       <h6 className="fw-bold mb-2">Customer</h6>
                       <div className="small mb-1">
-                        <strong>Name:</strong>{' '}
+                        <strong>Name:</strong> {order?.pickUpName || 'N/A'}
                       </div>
                       <div className="small mb-1">
-                        <strong>Email:</strong>{' '}
+                        <strong>Email:</strong> {order?.pickUpEmail || 'N/A'}
                       </div>
                       <div className="small">
                         <strong>Phone:</strong>{' '}
+                        {order?.pickUpPhoneNumber || 'N/A'}
                       </div>
                     </div>
                   </div>
@@ -66,7 +75,7 @@ function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
                       </label>
                       <div>
                         <span className={`btn disabled btn-success`}>
-                          STATUS
+                          {order.status}
                         </span>
                       </div>
                     </div>
@@ -89,29 +98,38 @@ function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
                     </span>
                   </div>
                   <div className="vstack gap-3">
-                    <div className="border rounded-2 p-3">
-                      <div className="d-flex justify-content-between flex-wrap gap-3 mb-2">
-                        <div className="flex-grow-1">
-                          <div className="fw-semibold">NAME</div>
-                          <div className="small text-muted">Qty × $</div>
-                        </div>
-                      </div>
+                    {order?.orderDetails?.length > 0 ? (
+                      order.orderDetails.map((item, index) => (
+                        <div key={index} className="border rounded-2 p-3">
+                          <div className="d-flex justify-content-between flex-wrap gap-3 mb-2">
+                            <div className="flex-grow-1">
+                              <div className="fw-semibold">{item.itemName}</div>
+                              <div className="small text-muted">
+                                Qty {item.quantityt} × $
+                                {parseFloat(item.price || 0).toFixed(2)}
+                              </div>
+                            </div>
+                          </div>
 
-                      {/* Rating section for completed orders */}
-                      <div className="mt-3 pt-3 border-top bg-light rounded p-3">
-                        <div className="d-flex align-items-center justify-content-between">
-                          <div>
-                            <h6 className="mb-1 fw-semibold small text-primary">
-                              <i className="bi bi-star me-1"></i>
-                              Rate this item
-                            </h6>
-                            <p className="mb-2 small text-muted">
-                              How was your experience with this item?
-                            </p>
+                          {/* Rating section for completed orders */}
+                          <div className="mt-3 pt-3 border-top bg-light rounded p-3">
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div>
+                                <h6 className="mb-1 fw-semibold small text-primary">
+                                  <i className="bi bi-star me-1"></i>
+                                  Rate this item
+                                </h6>
+                                <p className="mb-2 small text-muted">
+                                  How was your experience with this item?
+                                </p>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      ))
+                    ) : (
+                      <div className="text-muted">No items found</div>
+                    )}
                   </div>
                 </div>
                 <div className="d-flex justify-content-end gap-2 pt-2">

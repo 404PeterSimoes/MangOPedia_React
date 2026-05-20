@@ -57,12 +57,9 @@ function Register() {
       } else {
         toast.error(result.errorMessages?.[0] || 'Registration failed.');
       }
-      console.log(result);
     } catch (error) {
       toast.error(error.data?.errorMessages?.[0] || 'Registration failed.');
     }
-
-    console.log(formData);
   };
 
   return (
