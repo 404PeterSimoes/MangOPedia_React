@@ -8,6 +8,7 @@ function OrderDetailsModal({
   isSubmitting,
   updateData,
   onUpdateDataChange,
+  isAdmin,
 }) {
   console.log(order);
   return (
@@ -76,55 +77,58 @@ function OrderDetailsModal({
                     </div>
                   </div>
                 </div>
-                <div className="border rounded-3 p-3 mb-3">
-                  <h6 className="fw-bold mb-2">Update Status</h6>
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <label className="form-label small fw-semibold text-uppercase text-muted">
-                        Current
-                      </label>
-                      <div>
-                        <span
-                          className={`btn disabled btn-${getOrderStatusColor(order.status)}`}
+                {isAdmin && (
+                  <div className="border rounded-3 p-3 mb-3">
+                    <h6 className="fw-bold mb-2">Update Status</h6>
+                    <div className="row g-3">
+                      <div className="col-md-6">
+                        <label className="form-label small fw-semibold text-uppercase text-muted">
+                          Current
+                        </label>
+                        <div>
+                          <span
+                            className={`btn disabled btn-${getOrderStatusColor(order.status)}`}
+                          >
+                            {order.status}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label small fw-semibold text-uppercase text-muted">
+                          Change To
+                        </label>
+                        <select
+                          className="form-select"
+                          value={updateData.status || ''}
+                          onChange={(e) =>
+                            onUpdateDataChange({
+                              ...updateData,
+                              status: e.target.value,
+                            })
+                          }
                         >
-                          {order.status}
-                        </span>
+                          {' '}
+                          {/*AQUI */}
+                          <option value="">Select...</option>
+                          {order?.status === ORDER_STATUS.CONFIRMED && (
+                            <option value={ORDER_STATUS.READY_FOR_PICKUP}>
+                              {ORDER_STATUS.READY_FOR_PICKUP}
+                            </option>
+                          )}
+                          {order?.status === ORDER_STATUS.READY_FOR_PICKUP && (
+                            <option value={ORDER_STATUS.COMPLETED}>
+                              {ORDER_STATUS.COMPLETED}
+                            </option>
+                          )}
+                          <option value={ORDER_STATUS.CANCELLED}>
+                            {ORDER_STATUS.CANCELLED}
+                          </option>
+                        </select>
                       </div>
                     </div>
-                    <div className="col-md-6">
-                      <label className="form-label small fw-semibold text-uppercase text-muted">
-                        Change To
-                      </label>
-                      <select
-                        className="form-select"
-                        value={updateData.status || ''}
-                        onChange={(e) =>
-                          onUpdateDataChange({
-                            ...updateData,
-                            status: e.target.value,
-                          })
-                        }
-                      >
-                        {' '}
-                        {/*AQUI */}
-                        <option value="">Select...</option>
-                        {order?.status === ORDER_STATUS.CONFIRMED && (
-                          <option value={ORDER_STATUS.READY_FOR_PICKUP}>
-                            {ORDER_STATUS.READY_FOR_PICKUP}
-                          </option>
-                        )}
-                        {order?.status === ORDER_STATUS.READY_FOR_PICKUP && (
-                          <option value={ORDER_STATUS.COMPLETED}>
-                            {ORDER_STATUS.COMPLETED}
-                          </option>
-                        )}
-                        <option value={ORDER_STATUS.CANCELLED}>
-                          {ORDER_STATUS.CANCELLED}
-                        </option>
-                      </select>
-                    </div>
                   </div>
-                </div>
+                )}
+
                 <div className="border rounded-3 p-3 mb-3">
                   <div className="d-flex align-items-center justify-content-between mb-3">
                     <h6 className="fw-bold mb-0">Items</h6>
@@ -173,24 +177,26 @@ function OrderDetailsModal({
                   >
                     Close
                   </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    disabled={isSubmitting || !updateData.status}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Updating...
-                      </>
-                    ) : (
-                      <>Update Order</>
-                    )}
-                  </button>
+                  {isAdmin && (
+                    <button
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting || !updateData.status}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span
+                            className="spinner-border spinner-border-sm me-2"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Updating...
+                        </>
+                      ) : (
+                        <>Update Order</>
+                      )}
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

@@ -13,6 +13,7 @@ function OrderManagement() {
   const { user } = useSelector((state) => state.auth);
 
   const isAdmin = user?.role === ROLES.ADMIN;
+
   let userId = '';
   if (!isAdmin && user) {
     userId = user.id;
@@ -162,6 +163,7 @@ function OrderManagement() {
           onSubmit={handleFormSubmit}
           onClose={handleCloseModal}
           isSubmitting={isSubmitting}
+          isAdmin={isAdmin}
         />
       )}
     </div>
