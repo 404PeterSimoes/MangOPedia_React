@@ -14,7 +14,10 @@ function OrderManagement() {
 
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubttiming] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null); // to edit
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [statusFilter, setStatusFilter] = useState('');
+  const [searchFilter, setSearchFilter] = useState('');
 
   console.log(orders);
 
@@ -50,6 +53,20 @@ function OrderManagement() {
     setShowModal(false);
     setSelectedOrder(null);
   };
+
+  const filteredOrders = orders.filter((order) => {
+    const statusMatch = statusFilter ? order.status === statusFilter : true;
+
+    const searchMatch = searchFilter
+      ? order.pickUpName.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        order.pickUpEmail.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        order.pickUpPhoneNumber
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase())
+      : true;
+
+    return statusMatch && searchMatch;
+  });
 
   return (
     <div className="container-fluid p-4 mx-3">
