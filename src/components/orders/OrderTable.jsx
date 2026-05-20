@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '../../utility/constants';
+import { formatDate } from '../../utility/generalUtility';
 
 function OrderTable({ orders, isLoading, error, onEdit }) {
   if (isLoading) {
@@ -50,27 +51,15 @@ function OrderTable({ orders, isLoading, error, onEdit }) {
             <tr key={order.orderHeaderId}>
               <td className="fw-semibold">#{order.orderHeaderId}</td>
               <td>
-                <small className="text-muted">{order.orderDate}</small>
+                <small className="text-muted">
+                  {formatDate(order.orderDate)}
+                </small>
               </td>
               <td>
                 <div className="small">
-                  <div
-                    className="fw-semibold text-truncate"
-                    style={{ maxWidth: '140px' }}
-                  >
-                    {order.pickUpName}
-                  </div>
-                  <div
-                    className="fw-semibold text-truncate"
-                    style={{ maxWidth: '140px' }}
-                  >
-                    {order.pickUpEmail}
-                  </div>
-                  <div
-                    className="fw-semibold text-truncate"
-                    style={{ maxWidth: '140px' }}
-                  >
-                    {order.pickUpPhoneNumber}
+                  <div className="fw-semibold">{order.pickUpName}</div>
+                  <div>
+                    {order.pickUpEmail} | {order.pickUpPhoneNumber}
                   </div>
                 </div>
               </td>

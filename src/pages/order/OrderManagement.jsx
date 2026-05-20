@@ -5,6 +5,7 @@ import {
 } from '../../store/api/ordersApi';
 import { toast } from 'react-toastify';
 import OrderTable from '../../components/orders/OrderTable';
+import { ORDER_STATUS_OPTIONS } from '../../utility/constants';
 
 function OrderManagement() {
   const { data: orders = [], isLoading, error, refetch } = useGetOrdersQuery();
@@ -58,6 +59,32 @@ function OrderManagement() {
             <div>
               <h2>Order Management</h2>
               <p className="text-muted mb-0">Manage your restaurant's orders</p>
+            </div>
+            <div className="d-flex align-items-center gap-3">
+              <div>
+                <label className="form-label small fw-semibold text-uppercase text-muted mb-1">
+                  Search Customer
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search by name, email, or phone..."
+                  style={{ minWidth: '350px' }}
+                />
+              </div>
+              <div>
+                <label className="form-label small fw-semibold text-uppercase text-muted mb-1">
+                  Filter by Status
+                </label>
+                <select className="form-select" style={{ minWidth: '200px' }}>
+                  <option value="">All Orders</option>
+                  {ORDER_STATUS_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
         </div>
