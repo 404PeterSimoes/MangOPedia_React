@@ -1,5 +1,5 @@
 import { ORDER_STATUS } from '../../utility/constants';
-import { formatDate } from '../../utility/generalUtility';
+import { formatDate, getOrderStatusColor } from '../../utility/generalUtility';
 
 function OrderDetailsModal({
   order,
@@ -52,7 +52,9 @@ function OrderDetailsModal({
                       </div>
                       <div className="small">
                         <strong>Status:</strong>
-                        <span className={`badge p-2 text-bg-success ms-1`}>
+                        <span
+                          className={`badge p-2 text-bg-${getOrderStatusColor(order.status)} ms-1`}
+                        >
                           {order.status}
                         </span>
                       </div>
@@ -82,7 +84,9 @@ function OrderDetailsModal({
                         Current
                       </label>
                       <div>
-                        <span className={`btn disabled btn-success`}>
+                        <span
+                          className={`btn disabled btn-${getOrderStatusColor(order.status)}`}
+                        >
                           {order.status}
                         </span>
                       </div>

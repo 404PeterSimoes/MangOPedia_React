@@ -19,7 +19,7 @@ function OrderManagement() {
   const isAdmin = user?.role === ROLES.ADMIN;
 
   const [showModal, setShowModal] = useState(false);
-  const [isSubmitting, setIsSubttiming] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const [updateData, setUpdateData] = useState({ status: '' });
@@ -29,7 +29,7 @@ function OrderManagement() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    setIsSubttiming(true);
+    setIsSubmitting(true);
 
     try {
       if (!selectedOrder || !isAdmin) {
@@ -58,7 +58,7 @@ function OrderManagement() {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsSubttiming(false);
+      setIsSubmitting(false);
     }
   };
 
