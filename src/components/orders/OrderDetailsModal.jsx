@@ -1,4 +1,4 @@
-function OrderDetailsModal() {
+function OrderDetailsModal({ order, onSubmit, onClose, isSubmitting }) {
   return (
     <>
       <div className="modal-backdrop fade show" />
@@ -18,7 +18,12 @@ function OrderDetailsModal() {
                 <h5 className="modal-title fw-bold mb-0">Order #</h5>
                 <small className="text-muted">Placed</small>
               </div>
-              <button type="button" className="btn-close" aria-label="Close" />
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={onClose}
+              />
             </div>
             <div className="modal-body">
               <form className="pt-2">
@@ -110,7 +115,11 @@ function OrderDetailsModal() {
                   </div>
                 </div>
                 <div className="d-flex justify-content-end gap-2 pt-2">
-                  <button type="button" className="btn btn-secondary">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={onClose}
+                  >
                     Close
                   </button>
                   <button type="submit" className="btn btn-primary">

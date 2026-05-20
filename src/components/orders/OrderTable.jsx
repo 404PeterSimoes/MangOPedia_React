@@ -75,7 +75,7 @@ function OrderTable({ orders, isLoading, error, onEdit }) {
               <td>
                 <div className="btn-group" role="group">
                   <button
-                    onClick={() => onEdit(item)}
+                    onClick={() => onEdit(order)}
                     className="btn btn-sm btn-outline-success"
                     title="Edit"
                   >
