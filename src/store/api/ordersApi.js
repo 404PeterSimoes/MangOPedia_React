@@ -43,12 +43,14 @@ export const ordersApi = baseApi.injectEndpoints({
     }),
 
     updateOrder: builder.mutation({
-      query: ({ id, formData }) => ({
-        url: `/OrderHeader/${id}`,
+      query: ({ orderId, orderData }) => ({
+        url: `/OrderHeader/${orderId}`,
         method: 'PUT',
-        body: formData,
+        body: orderData,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Order', id }],
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: 'Order', id: orderId },
+      ],
     }),
   }),
 });

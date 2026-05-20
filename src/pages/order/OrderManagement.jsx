@@ -55,7 +55,6 @@ function OrderManagement() {
       }
 
       setShowModal(false);
-      resetForm();
     } catch (error) {
       console.log(error);
     } finally {
