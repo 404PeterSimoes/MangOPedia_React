@@ -19,8 +19,6 @@ function OrderManagement() {
   const [statusFilter, setStatusFilter] = useState('');
   const [searchFilter, setSearchFilter] = useState('');
 
-  console.log(orders);
-
   const handleFormSubmit = async (formData) => {
     setIsSubttiming(true);
     try {
@@ -87,13 +85,20 @@ function OrderManagement() {
                   className="form-control"
                   placeholder="Search by name, email, or phone..."
                   style={{ minWidth: '350px' }}
+                  value={searchFilter}
+                  onChange={(e) => setSearchFilter(e.target.value)}
                 />
               </div>
               <div>
                 <label className="form-label small fw-semibold text-uppercase text-muted mb-1">
                   Filter by Status
                 </label>
-                <select className="form-select" style={{ minWidth: '200px' }}>
+                <select
+                  className="form-select"
+                  style={{ minWidth: '200px' }}
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                >
                   <option value="">All Orders</option>
                   {ORDER_STATUS_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -115,7 +120,7 @@ function OrderManagement() {
       </div>
 
       <OrderTable
-        orders={orders}
+        orders={filteredOrders}
         isLoading={isLoading}
         error={error}
         onEdit={handleEditOrder}
