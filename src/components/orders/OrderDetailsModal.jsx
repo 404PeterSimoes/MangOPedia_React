@@ -16,7 +16,17 @@ function OrderDetailsModal({
 }) {
   const [updateOrderDetails] = useUpdateOrderDetailsMutation();
 
-  const [ratings, setRatings] = useState({ 10: 4, 11: 3 });
+  const [ratings, setRatings] = useState(() => {
+    const initialRatings = {};
+    if (order?.orderDetails?.length > 0) {
+      order.orderDetails.forEach((item) => {
+        if (item.rating) {
+          initialRatings[item.orderDetailId] = item.rating;
+        }
+      });
+    }
+    return initialRatings;
+  });
 
   const handleRatingChange = async (orderDetailId, newRating) => {
     try {
