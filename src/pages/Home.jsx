@@ -147,7 +147,7 @@ function Home() {
 
                     <div className="card-body d-flex flex-column p-4">
                       <div className="d-flex justify-content-between align-items-center mb-3">
-                        <h5 className="card-title fw-bold mb-0 text-dark lh-sm flex-grow-1 me-3">
+                        <h5 className="card-title fw-bold mb-0 lh-sm flex-grow-1 me-3">
                           {item.name}
                         </h5>
                         <div className="h4 text-primary fw-bold mb-0 flex-shrink-0">
