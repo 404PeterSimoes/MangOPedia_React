@@ -3,6 +3,7 @@ import { ORDER_STATUS } from '../../utility/constants';
 import { formatDate, getOrderStatusColor } from '../../utility/generalUtility';
 import Rating from '../ui/Rating';
 import { useUpdateOrderDetailsMutation } from '../../store/api/ordersApi';
+import { toast } from 'react-toastify';
 
 function OrderDetailsModal({
   order,
@@ -16,6 +17,26 @@ function OrderDetailsModal({
   const [updateOrderDetails] = useUpdateOrderDetailsMutation();
 
   const [ratings, setRatings] = useState({ 10: 4, 11: 3 });
+
+  const handleRatingChange = async (orderDetailId, newRating) => {
+    try {
+      await updateOrderDetails({
+        orderDetailsId: orderDetailId,
+        rating: newRating,
+      }).unwrap();
+
+      setRatings((prev) => ({
+        ...prev,
+        [orderDetailId]: newRating,
+      }));
+      toast.success(
+        `Rating of ${newRating} star${newRating !== 1 ? 's' : ''} submitted successfully!`,
+      );
+    } catch (error) {
+      console.error('Error submitting the rating:', error);
+      toast.error('Failed to submit the rating. Please try again.');
+    }
+  };
 
   return (
     <>
@@ -167,7 +188,16 @@ function OrderDetailsModal({
                                 </h6>
                               </div>
                               <div className="text-end">
-                                <Rating value={3} size="medium" />
+                                <Rating
+                                  value={ratings[item.orderDetailId || 0]}
+                                  size="medium"
+                                  onChange={() =>
+                                    handleRatingChange(
+                                      item.orderDetailId,
+                                      rating,
+                                    )
+                                  }
+                                />
                               </div>
                             </div>
                           </div>
