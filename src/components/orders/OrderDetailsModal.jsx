@@ -4,6 +4,7 @@ import { formatDate, getOrderStatusColor } from '../../utility/generalUtility';
 import Rating from '../ui/Rating';
 import { useUpdateOrderDetailsMutation } from '../../store/api/ordersApi';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function OrderDetailsModal({
   order,
@@ -14,6 +15,7 @@ function OrderDetailsModal({
   onUpdateDataChange,
   isAdmin,
 }) {
+  console.log(order);
   const [updateOrderDetails] = useUpdateOrderDetailsMutation();
 
   const [ratings, setRatings] = useState(() => {
@@ -27,6 +29,11 @@ function OrderDetailsModal({
     }
     return initialRatings;
   });
+
+  const { user } = useSelector((state) => state.auth);
+  const canRate =
+    order?.status === ORDER_STATUS.COMPLETED &&
+    order?.applicationUserId === user?.id;
 
   const handleRatingChange = async (orderDetailId, newRating) => {
     try {
@@ -169,10 +176,12 @@ function OrderDetailsModal({
                 <div className="border rounded-3 p-3 mb-3">
                   <div className="d-flex align-items-center justify-content-between mb-3">
                     <h6 className="fw-bold mb-0">Items</h6>
-                    <span className="badge bg-success-subtle text-success px-3 py-2">
-                      <i className="bi bi-star me-1"></i>
-                      You can now rate your items
-                    </span>
+                    {canRate && (
+                      <span className="badge bg-success-subtle text-success px-3 py-2">
+                        <i className="bi bi-star me-1"></i>
+                        You can now rate your items
+                      </span>
+                    )}
                   </div>
                   <div className="vstack gap-3">
                     {order?.orderDetails?.length > 0 ? (
@@ -189,37 +198,39 @@ function OrderDetailsModal({
                           </div>
 
                           {/* Rating section for completed orders */}
-                          <div className="mt-3 pt-3 border-top bg-light rounded p-3">
-                            <div className="d-flex align-items-center justify-content-between">
-                              <div>
-                                <h6 className="mb-1 fw-semibold small text-primary">
-                                  <i className="bi bi-star me-1"></i>
-                                  Rate this item
-                                </h6>
-                              </div>
-                              <div className="text-end">
-                                <Rating
-                                  value={ratings[item.orderDetailId || 0]}
-                                  size="medium"
-                                  onChange={(rating) =>
-                                    handleRatingChange(
-                                      item.orderDetailId,
-                                      rating,
-                                    )
-                                  }
-                                />
-                                {(ratings[item.orderDetailId] ||
-                                  item?.rating > 0) && (
-                                  <div className="mt-1">
-                                    <small className="text-success">
-                                      <i className="bi bi-check-circle-fill me-1"></i>{' '}
-                                      Rated
-                                    </small>
-                                  </div>
-                                )}
+                          {canRate && (
+                            <div className="mt-3 pt-3 border-top bg-light rounded p-3">
+                              <div className="d-flex align-items-center justify-content-between">
+                                <div>
+                                  <h6 className="mb-1 fw-semibold small text-primary">
+                                    <i className="bi bi-star me-1"></i>
+                                    Rate this item
+                                  </h6>
+                                </div>
+                                <div className="text-end">
+                                  <Rating
+                                    value={ratings[item.orderDetailId || 0]}
+                                    size="medium"
+                                    onChange={(rating) =>
+                                      handleRatingChange(
+                                        item.orderDetailId,
+                                        rating,
+                                      )
+                                    }
+                                  />
+                                  {(ratings[item.orderDetailId] ||
+                                    item?.rating > 0) && (
+                                    <div className="mt-1">
+                                      <small className="text-success">
+                                        <i className="bi bi-check-circle-fill me-1"></i>{' '}
+                                        Rated
+                                      </small>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       ))
                     ) : (
