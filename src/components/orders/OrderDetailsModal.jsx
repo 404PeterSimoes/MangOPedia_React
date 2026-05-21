@@ -208,6 +208,15 @@ function OrderDetailsModal({
                                     )
                                   }
                                 />
+                                {(ratings[item.orderDetailId] ||
+                                  item?.rating > 0) && (
+                                  <div className="mt-1">
+                                    <small className="text-success">
+                                      <i className="bi bi-check-circle-fill me-1"></i>{' '}
+                                      Rated
+                                    </small>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
