@@ -3,6 +3,7 @@ import { ROLES, ROUTES } from '../../utility/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../store/slice/authSlice';
 import { toast } from 'react-toastify';
+import { toggleTheme } from '../../store/slice/themeSlice';
 
 function Header() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -52,7 +53,6 @@ function Header() {
           </ul>
           <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-1">
             {/* Theme toggle visible for all users */}
-
             <li className="nav-item me-lg-2">
               <NavLink
                 to={ROUTES.CART}
@@ -69,7 +69,6 @@ function Header() {
                 </span>
               </NavLink>
             </li>
-
             {isAuthenticated ? (
               <>
                 <li className="nav-item dropdown">
@@ -152,6 +151,15 @@ function Header() {
                 </li>
               </>
             )}
+            <li className="nav-item me-lg-2">
+              <button
+                type="button"
+                className="nav-link btn btn-link d-flex align-items-center p-0"
+                onClick={() => dispatch(toggleTheme())}
+              >
+                <i className="bi bi-moon-stars fs-5"></i>
+              </button>
+            </li>
           </ul>
         </div>
       </div>
