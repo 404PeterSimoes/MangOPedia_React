@@ -15,7 +15,6 @@ function OrderDetailsModal({
   onUpdateDataChange,
   isAdmin,
 }) {
-  console.log(order);
   const [updateOrderDetails] = useUpdateOrderDetailsMutation();
 
   const [ratings, setRatings] = useState(() => {

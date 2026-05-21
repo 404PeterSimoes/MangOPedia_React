@@ -62,7 +62,7 @@ export const ordersApi = baseApi.injectEndpoints({
           rating: rating,
         },
       }),
-      invalidatesTags: ['Order'],
+      invalidatesTags: ['Order', 'MenuItem'],
     }),
   }),
 });

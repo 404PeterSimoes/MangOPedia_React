@@ -1,13 +1,16 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useGetMenuItemByIdQuery } from '../../store/api/menuItemApi';
-import { API_BASE_URL } from '../../utility/constants';
+import { API_BASE_URL, ROUTES } from '../../utility/constants';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addToCart } from '../../store/slice/cartSlice';
+import Rating from '../../components/ui/Rating';
 
 function MenuItemDetails() {
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -148,6 +151,14 @@ function MenuItemDetails() {
                   </div>
                 </div>
               </div>
+              {selectedMenuItem.rating > 0 && (
+                <div className="d-flex align-items-center">
+                  <Rating value={selectedMenuItem.rating} size="small" />
+                  <span className="ms-1 text-muted small fw-semibold">
+                    {selectedMenuItem.rating.toFixed(1)}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Description */}
@@ -213,7 +224,10 @@ function MenuItemDetails() {
                           Add to Cart
                         </button>
 
-                        <button className="btn btn-outline-primary">
+                        <button
+                          className="btn btn-outline-primary"
+                          onClick={() => navigate(ROUTES.HOME)}
+                        >
                           <i className="bi bi-arrow-left me-2"></i>
                           Continue Shopping
                         </button>
