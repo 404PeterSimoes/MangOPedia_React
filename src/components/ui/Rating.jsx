@@ -14,9 +14,21 @@ function Rating(value = 0, size = 'medium', onChange = null) {
       !isInteractive &&
       roundedRating % 1 === 0.5 &&
       index === Math.ceil(roundedRating);
+
+    return (
+      <i
+        key={index}
+        className={`bi ${isHalf ? 'bi-star-half' : isFilled ? 'bi-star-fill' : 'bi-star'}
+         ${isFilled || isHalf ? 'text-warning' : 'text-muted'} me-1 ${sizeClass}`}
+      ></i>
+    );
   };
 
-  return <i class="bi bi-star-half"></i>;
+  return (
+    <div className="d-flex align-items-center">
+      <div className="d-flex">{[1, 2, 3, 4, 5].map(renderStar)}</div>
+    </div>
+  );
 }
 
 export default Rating;
