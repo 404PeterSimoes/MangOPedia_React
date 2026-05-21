@@ -132,7 +132,7 @@ function MenuItemDetails() {
             <div className="mb-4">
               <div className="d-flex align-items-start justify-content-between mb-3">
                 <div>
-                  <h1 className="display-6 fw-bold mb-2 text-dark">
+                  <h1 className="display-6 fw-bold mb-2">
                     {selectedMenuItem.name}
                   </h1>
                   <div className="d-flex align-items-center gap-3 mb-2">

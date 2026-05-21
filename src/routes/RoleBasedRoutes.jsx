@@ -7,7 +7,9 @@ function RoleBasedRoutes({ allowedRoles, children }) {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} />;
+    return (
+      <Navigate to={ROUTES.LOGIN} state={{ from: location.pathname }} replace />
+    );
   }
 
   const hasRequiredRole = allowedRoles
