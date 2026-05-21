@@ -71,7 +71,7 @@ function OrderDetailsModal({
             <div className="modal-body">
               <form className="pt-2" onSubmit={onSubmit}>
                 <div className="row g-3 mb-3">
-                  <div clas sName="col-md-6">
+                  <div className="col-md-6">
                     <div className="border rounded-3 p-3 h-100">
                       <h6 className="fw-bold mb-2">Order Info</h6>
                       <div className="small mb-1">
@@ -191,7 +191,7 @@ function OrderDetailsModal({
                                 <Rating
                                   value={ratings[item.orderDetailId || 0]}
                                   size="medium"
-                                  onChange={() =>
+                                  onChange={(rating) =>
                                     handleRatingChange(
                                       item.orderDetailId,
                                       rating,

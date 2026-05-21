@@ -58,7 +58,7 @@ export const ordersApi = baseApi.injectEndpoints({
         url: `/OrderDetails/${orderDetailsId}`,
         method: 'PUT',
         body: {
-          orderDetailsId: orderDetailsId,
+          orderDetailId: orderDetailsId,
           rating: rating,
         },
       }),

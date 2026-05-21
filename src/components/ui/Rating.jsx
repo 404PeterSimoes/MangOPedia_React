@@ -20,6 +20,9 @@ function Rating({ value = 0, size = 'medium', onChange = null }) {
         key={index}
         className={`bi ${isHalf ? 'bi-star-half' : isFilled ? 'bi-star-fill' : 'bi-star'}
          ${isFilled || isHalf ? 'text-warning' : 'text-muted'} me-1 ${sizeClass}`}
+        onMouseEnter={() => isInteractive && setHover(index)}
+        onMouseLeave={() => isInteractive && setHover(0)}
+        onClick={() => isInteractive && onChange(index)}
       ></i>
     );
   };
