@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Rating(value = 0, size = 'medium', onChange = null) {
+function Rating({ value = 0, size = 'medium', onChange = null }) {
   const [hover, setHover] = useState(0);
   const isInteractive = !!onChange;
   const sizeClass =

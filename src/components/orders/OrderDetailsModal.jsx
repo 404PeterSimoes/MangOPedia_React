@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { ORDER_STATUS } from '../../utility/constants';
 import { formatDate, getOrderStatusColor } from '../../utility/generalUtility';
+import Rating from '../ui/Rating';
+import { useUpdateOrderDetailsMutation } from '../../store/api/ordersApi';
 
 function OrderDetailsModal({
   order,
@@ -10,7 +13,10 @@ function OrderDetailsModal({
   onUpdateDataChange,
   isAdmin,
 }) {
-  console.log(order);
+  const [updateOrderDetails] = useUpdateOrderDetailsMutation();
+
+  const [ratings, setRatings] = useState({ 10: 4, 11: 3 });
+
   return (
     <>
       <div className="modal-backdrop fade show" />
@@ -44,7 +50,7 @@ function OrderDetailsModal({
             <div className="modal-body">
               <form className="pt-2" onSubmit={onSubmit}>
                 <div className="row g-3 mb-3">
-                  <div className="col-md-6">
+                  <div clas sName="col-md-6">
                     <div className="border rounded-3 p-3 h-100">
                       <h6 className="fw-bold mb-2">Order Info</h6>
                       <div className="small mb-1">
@@ -159,6 +165,9 @@ function OrderDetailsModal({
                                   <i className="bi bi-star me-1"></i>
                                   Rate this item
                                 </h6>
+                              </div>
+                              <div className="text-end">
+                                <Rating value={3} size="medium" />
                               </div>
                             </div>
                           </div>
